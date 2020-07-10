@@ -18,12 +18,7 @@ public class BeanUser {
 		this.password = password;
 	}
 	
-	public boolean valiadte(String login, String senha) {
-		
-		return login.equalsIgnoreCase("admin") ? true : false;
-		
-			
-	}
+
 	
 	
 	

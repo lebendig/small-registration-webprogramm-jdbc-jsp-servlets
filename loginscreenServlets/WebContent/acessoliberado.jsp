@@ -9,5 +9,7 @@
 <body>
 
 <h2>Welcome to the JSP System</h2>
+<a href="userregistration.jsp">User Registration</a>
+
 </body>
 </html>

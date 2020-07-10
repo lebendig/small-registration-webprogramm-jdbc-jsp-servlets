@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import DAO.DaoLogin;
 import beans.BeanUser;
 
 /**
@@ -17,7 +18,7 @@ import beans.BeanUser;
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    private DaoLogin daoLogin = new DaoLogin();   
 
     public LoginServlet() {
         super();
@@ -38,18 +39,35 @@ public class LoginServlet extends HttpServlet {
 //		System.out.println(request.getParameter("login"));
 //		System.out.println(request.getParameter("password"));
 		
-		BeanUser user = new BeanUser();
+//		BeanUser user = new BeanUser();
 		
-		if (user.valiadte(request.getParameter("login"), request.getParameter("password"))) {
-			
-			RequestDispatcher dispacher = request.getRequestDispatcher("acessoliberado.jsp");
-			dispacher.forward(request, response);
-			
-		} else{
-			RequestDispatcher dispacher = request.getRequestDispatcher("acessonegado.jsp");
-			
-			dispacher.forward(request, response);
-		};
+//		if (user.valiadte(request.getParameter("login"), request.getParameter("password"))) {
+//			
+//			RequestDispatcher dispacher = request.getRequestDispatcher("acessoliberado.jsp");
+//			dispacher.forward(request, response);
+//			
+//		} else{
+//			RequestDispatcher dispacher = request.getRequestDispatcher("acessonegado.jsp");
+//			
+//			dispacher.forward(request, response);
+//		};
+		
+		
+		try {
+			if (daoLogin.validateLogin(request.getParameter("login"), request.getParameter("password"))) {
+				
+				RequestDispatcher dispacher = request.getRequestDispatcher("acessoliberado.jsp");
+				dispacher.forward(request, response);
+				
+			} else {
+				RequestDispatcher dispacher = request.getRequestDispatcher("acessonegado.jsp");
+				
+				dispacher.forward(request, response);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 	}

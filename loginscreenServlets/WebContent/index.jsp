@@ -18,9 +18,9 @@ login:
 <input type="text" id ="login" name="login">
 <br>
 password:
-<input type="text" id="password" name="password">
+<input type="password" id="password" name="password">
 <br>
-<input type="submit" value="Send">
+<input type="submit" value="Save">
 
 
 </form>
