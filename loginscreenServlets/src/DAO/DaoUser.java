@@ -24,13 +24,14 @@ public class DaoUser {
 	
 	public void save(BeanUser user) {
 		
-		String sql = "INSERT INTO public.user(login, password) VALUES (?,?)";
+		String sql = "INSERT INTO public.user(login, password, name) VALUES (?,?,?)";
 		try {
 			PreparedStatement prepared = connection.prepareStatement(sql);
 			
 			
 			prepared.setString(1, user.getLogin());
 			prepared.setString(2, user.getPassword());
+			prepared.setString(3, user.getName());
 			prepared.execute();
 			connection.commit();
 			
@@ -59,7 +60,7 @@ public class DaoUser {
 	public List<BeanUser> getUsers(){
 		List<BeanUser> listUser = new ArrayList<BeanUser>();
 		
-		String sql = "Select login, password from public.user";
+		String sql = "Select * from public.user";
 		
 		try {
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -68,8 +69,9 @@ public class DaoUser {
 			while(resultSet.next()) {
 				BeanUser user = new BeanUser();
 				
+				user.setId(resultSet.getLong("id"));	
 				user.setLogin(resultSet.getString("login"));
-				user.setPassword(resultSet.getString("password"));
+				user.setName(resultSet.getString("name"));
 				listUser.add(user);
 				
 			}
@@ -84,6 +86,85 @@ public class DaoUser {
 	
 		
 		return listUser;
+		
+		
+		
+	}
+	
+	
+	public void delete(String login) {
+		String sql = "DELETE FROM public.user where login = '" + login + "'";
+		try {
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.execute();
+			connection.commit();
+			
+			
+		} catch (SQLException e) {
+			
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	
+	public BeanUser getUser(String login) {
+		BeanUser user = new BeanUser();
+		try {
+		String sql = " Select * from public.user WHERE login = '" + login + "'";
+				PreparedStatement statement = connection.prepareStatement(sql);
+				ResultSet resultSet = statement.executeQuery();
+				
+				if (resultSet.next()) {
+					
+					
+				user.setId( resultSet.getLong("id"));	
+				user.setLogin(resultSet.getString("login"));	
+				user.setPassword(resultSet.getString("password"));
+				return user;
+				}
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+return user;
+	}
+	
+	
+	public void update(BeanUser user) {
+		String sql = "UPDATE public.user SET login= ?, password = ? name=? WHERE id = '" + user.getId() +"'";
+		try {
+			
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, user.getLogin());
+			statement.setString(2, user.getPassword());
+			statement.setString(3, user.getName());
+
+			statement.executeUpdate();
+			
+			connection.commit();
+			
+			
+			
+		} catch (SQLException e) {
+			
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 		
