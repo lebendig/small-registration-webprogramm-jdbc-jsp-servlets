@@ -55,7 +55,30 @@ public class DaoUser {
 	}
 	
 	
+	public boolean hasUser(String login) {
+		
+		BeanUser user = new BeanUser();
+		try {
+		String sql = " Select count(1) as qtd from public.user WHERE login = '" + login + "'";
+				PreparedStatement statement = connection.prepareStatement(sql);
+				ResultSet resultSet = statement.executeQuery();
+				
+				if (resultSet.next()) {
+					
+				
+			return resultSet.getInt("qtd") > 0 ; //TRUE
+				}
+				
+				
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		
+		return false;
 	
+	}
 	
 	public List<BeanUser> getUsers(){
 		List<BeanUser> listUser = new ArrayList<BeanUser>();
@@ -92,8 +115,8 @@ public class DaoUser {
 	}
 	
 	
-	public void delete(String login) {
-		String sql = "DELETE FROM public.user where login = '" + login + "'";
+	public void delete(String id) {
+		String sql = "DELETE FROM public.user where login = '" + id + "'";
 		try {
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.execute();
@@ -116,10 +139,10 @@ public class DaoUser {
 	}
 	
 	
-	public BeanUser getUser(String login) {
+	public BeanUser getUser(String id) {
 		BeanUser user = new BeanUser();
 		try {
-		String sql = " Select * from public.user WHERE login = '" + login + "'";
+		String sql = " Select * from public.user WHERE id = '" + id + "'";
 				PreparedStatement statement = connection.prepareStatement(sql);
 				ResultSet resultSet = statement.executeQuery();
 				
@@ -129,6 +152,7 @@ public class DaoUser {
 				user.setId( resultSet.getLong("id"));	
 				user.setLogin(resultSet.getString("login"));	
 				user.setPassword(resultSet.getString("password"));
+				user.setName(resultSet.getString("name"));
 				return user;
 				}
 			
@@ -140,7 +164,7 @@ return user;
 	
 	
 	public void update(BeanUser user) {
-		String sql = "UPDATE public.user SET login= ?, password = ? name=? WHERE id = '" + user.getId() +"'";
+		String sql = "UPDATE public.user SET login= ?, password = ?, name=? WHERE id = '" + user.getId() +"'";
 		try {
 			
 			PreparedStatement statement = connection.prepareStatement(sql);

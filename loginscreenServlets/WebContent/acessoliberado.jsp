@@ -8,8 +8,8 @@
 </head>
 <body>
 
-<h2>Welcome to the JSP System</h2>
-<a href="userregistration.jsp">User Registration</a>
+<h2>Welcome to the User Registration System</h2>
+<a href="saveUser?acao=listall"  ><img alt="" src="ressources/image/paciente_cadastro.png" title="User Registration"></a>
 
 </body>
 </html>

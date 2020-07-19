@@ -12,7 +12,7 @@
 
 <div class="container">  
 	
-	<form id="contact" action="saveUser" method="post">
+	<form id="contact" action="saveUser" method="post" id="formuser">
 <h3>Insert User</h3>
 		<table>
 	<tr>
@@ -35,7 +35,11 @@
 			
 			
 			</tr>
-				<td></td><td><button type="submit" value="send" id="contact-submit" data-submit="...Sending" >Submit</button></td>
+				<td></td><td><button type="submit" value="send" id="contact-submit" data-submit="...Sending" >Submit</button>
+				<button type="submit" value="cancel" id="cancel" onclick="document.getElementById('formuser').action = 'saveUser?acao=reset' " >Cancel</button>
+				<h3>${msg}</h3> <!-- give back "User already exists" -->
+				</td>
+				
 			</tr>
 
 		</table>
@@ -66,9 +70,9 @@
 	<c:out value ="${user.login }"></c:out></td><!-- celula -->
 	<td><c:out value ="${user.name }"></c:out></td>
 	<!--  assim é feito por get !! pois passou por uma url-->
-	<td><a href="saveUser?acao=delete&user=${user.login}"><img src="ressources/image/excluir.png" width="19px" height="19px" alt="Delete" title="Delete"></a></td>
+	<td><a href="saveUser?acao=delete&user=${user.id}"><img src="ressources/image/excluir.png" width="19px" height="19px" alt="Delete" title="Delete"></a></td>
 	<!-- alt ="" we use when the img cant be shown and title="" is when we put the mouse cursor on the image, its will show the content   -->
-	<td><a href="saveUser?acao=edit&user=${user.login}" ><img src="ressources/image/edit.jpg" width="20px" height="20px" alt="Update" title="Update"></a></td>
+	<td><a href="saveUser?acao=edit&user=${user.id}" ><img src="ressources/image/edit.jpg" width="20px" height="20px" alt="Update" title="Update"></a></td>
 	</tr>
 	</c:forEach>
 	

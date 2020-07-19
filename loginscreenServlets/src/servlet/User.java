@@ -60,13 +60,31 @@ public class User extends HttpServlet {
 		//passamos a lista de usuarios para a variavel users
 
 		
+	} else if(acao.equalsIgnoreCase("listall")) {
+RequestDispatcher view = request.getRequestDispatcher("/userregistration.jsp");
+		
+		//passamos a lista de usuarios para a variavel users
+		request.setAttribute("users", daoUser.getUsers());
+		view.forward(request, response);
 	} 
 	
 	}
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String acao = request.getParameter("acao");
+		if(acao != null && acao.equalsIgnoreCase("reset")) {
+			RequestDispatcher view = request.getRequestDispatcher("/userregistration.jsp");
+					
+					//passamos a lista de usuarios para a variavel users
+					request.setAttribute("users", daoUser.getUsers());
+					view.forward(request, response);
+					
+				} else {
+		
 		String id = request.getParameter("id");
+		
 		
 	user = new BeanUser();
 	user.setId(!id.isEmpty()? Long.parseLong(id):0);
@@ -76,11 +94,18 @@ public class User extends HttpServlet {
 	
 //	setPassword(request.getParameter("password"));
 	
+	if (id == null || id.isEmpty() && daoUser.hasUser(user.getLogin())) {
+		request.setAttribute("msg", "User already exists");
+		
+	}
 	
-	if (request.getParameter("id") == null || request.getParameter("id").isEmpty() ) {
+	
+	if (request.getParameter("id") == null || request.getParameter("id").isEmpty() && daoUser.hasUser(user.getLogin()) == false ) {
 	//ele vai retrornar para a propria pagina
+		
+		
 	daoUser.save(user);
-	} else {
+	} else if (request.getParameter("id") != null && !request.getParameter("id").isEmpty()) {
 		daoUser.update(user);
 	}
 	
@@ -91,5 +116,5 @@ public class User extends HttpServlet {
 	request.setAttribute("users", daoUser.getUsers());
 	view.forward(request, response);
 	}
-
+	}
 }
