@@ -50,7 +50,7 @@ public class User extends HttpServlet {
 	else if(acao.equalsIgnoreCase("edit")) {
 		
 		BeanUser userBean = daoUser.getUser(user);
-		
+
 		
 		RequestDispatcher view = request.getRequestDispatcher("/userregistration.jsp");
 		request.setAttribute("user", userBean);
@@ -73,6 +73,7 @@ RequestDispatcher view = request.getRequestDispatcher("/userregistration.jsp");
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		
 		String acao = request.getParameter("acao");
 		if(acao != null && acao.equalsIgnoreCase("reset")) {
 			RequestDispatcher view = request.getRequestDispatcher("/userregistration.jsp");
@@ -84,29 +85,37 @@ RequestDispatcher view = request.getRequestDispatcher("/userregistration.jsp");
 				} else {
 		
 		String id = request.getParameter("id");
-		
+		boolean canSave = true;
 		
 	user = new BeanUser();
-	user.setId(!id.isEmpty()? Long.parseLong(id):0);
+	user.setId(!id.isEmpty()? Long.parseLong(id):null);
 	user.setLogin(request.getParameter("login"));
 	user.setPassword(request.getParameter("password"));
 	user.setName(request.getParameter("name"));
+	user.setPhoneNumber(request.getParameter("phoneNumber"));
 	
 //	setPassword(request.getParameter("password"));
 	
 	if (id == null || id.isEmpty() && daoUser.hasUser(user.getLogin())) {
 		request.setAttribute("msg", "User already exists");
-		
+		request.setAttribute("user", user);
+		canSave = false;
 	}
 	
 	
-	if (request.getParameter("id") == null || request.getParameter("id").isEmpty() && daoUser.hasUser(user.getLogin()) == false ) {
+	if (request.getParameter("id") == null || request.getParameter("id").isEmpty() && daoUser.hasUser(user.getLogin()) == false && canSave ) {
 	//ele vai retrornar para a propria pagina
 		
 		
 	daoUser.save(user);
+	
 	} else if (request.getParameter("id") != null && !request.getParameter("id").isEmpty()) {
+		if (!daoUser.hasUserUpdate(user.getLogin(), String.valueOf(user.getId())) ){
 		daoUser.update(user);
+		} else {
+			request.setAttribute("msg2", "User already exists");
+			request.setAttribute("user", user);
+		}
 	}
 	
 	

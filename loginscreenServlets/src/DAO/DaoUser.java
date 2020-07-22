@@ -24,7 +24,7 @@ public class DaoUser {
 	
 	public void save(BeanUser user) {
 		
-		String sql = "INSERT INTO public.user(login, password, name) VALUES (?,?,?)";
+		String sql = "INSERT INTO public.user(login, password, name, phonenumber) VALUES (?,?,?,?)";
 		try {
 			PreparedStatement prepared = connection.prepareStatement(sql);
 			
@@ -32,6 +32,7 @@ public class DaoUser {
 			prepared.setString(1, user.getLogin());
 			prepared.setString(2, user.getPassword());
 			prepared.setString(3, user.getName());
+			prepared.setString(4, user.getPhoneNumber());
 			prepared.execute();
 			connection.commit();
 			
@@ -80,6 +81,32 @@ public class DaoUser {
 	
 	}
 	
+	
+public boolean hasUserUpdate(String login, String id) {
+		
+		BeanUser user = new BeanUser();
+		try {
+		String sql = " Select count(1) as qtd from public.user WHERE login = '" + login + "' AND id <>'" + id + "'";
+				PreparedStatement statement = connection.prepareStatement(sql);
+				ResultSet resultSet = statement.executeQuery();
+				
+				if (resultSet.next()) {
+					
+				
+			return resultSet.getInt("qtd") > 0 ; //TRUE
+				}
+				
+				
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		
+		return false;
+	
+	}
+	
 	public List<BeanUser> getUsers(){
 		List<BeanUser> listUser = new ArrayList<BeanUser>();
 		
@@ -95,6 +122,7 @@ public class DaoUser {
 				user.setId(resultSet.getLong("id"));	
 				user.setLogin(resultSet.getString("login"));
 				user.setName(resultSet.getString("name"));
+				user.setPhoneNumber(resultSet.getString("phonenumber"));
 				listUser.add(user);
 				
 			}
@@ -116,7 +144,7 @@ public class DaoUser {
 	
 	
 	public void delete(String id) {
-		String sql = "DELETE FROM public.user where login = '" + id + "'";
+		String sql = "DELETE FROM public.user WHERE id ='" + id + "'";
 		try {
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.execute();
@@ -153,6 +181,7 @@ public class DaoUser {
 				user.setLogin(resultSet.getString("login"));	
 				user.setPassword(resultSet.getString("password"));
 				user.setName(resultSet.getString("name"));
+				user.setPhoneNumber(resultSet.getString("phonenumber"));
 				return user;
 				}
 			
@@ -164,13 +193,14 @@ return user;
 	
 	
 	public void update(BeanUser user) {
-		String sql = "UPDATE public.user SET login= ?, password = ?, name=? WHERE id = '" + user.getId() +"'";
+		String sql = "UPDATE public.user SET login= ?, password = ?, name=?, phonenumber=?  WHERE id = '" + user.getId() +"'";
 		try {
 			
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, user.getLogin());
 			statement.setString(2, user.getPassword());
 			statement.setString(3, user.getName());
+			statement.setString(4, user.getPhoneNumber());
 
 			statement.executeUpdate();
 			

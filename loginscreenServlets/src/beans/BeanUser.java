@@ -5,7 +5,7 @@ public class BeanUser {
 	private String login;
 	private String password;
 	private String name;
-	
+	private String phoneNumber;
 	
 	public String getLogin() {
 		return login;
@@ -31,6 +31,14 @@ public class BeanUser {
 	public void setName(String name) {
 		this.name = name;
 	}
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	
+	
 
 	
 
